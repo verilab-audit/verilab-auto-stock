@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VeriLab AUTO-STOCK LIVE - GitHub</title>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--gold:#E8C170;--black:#0A0A0B;--card:#141416;--border:rgba(232,193,112,.28)}
+*{box-sizing:border-box;margin:0;padding:0}body{background:#0A0A0B;color:#fff;font-family:Inter,sans-serif;padding-bottom:90px}
+.gold-btn{background:linear-gradient(135deg,#E8C170,#C9A86A);color:#000;border:none;border-radius:999px;padding:14px;width:100%;font-weight:800;cursor:pointer;margin-top:10px}
+.card{background:#141416;border:1px solid var(--border);border-radius:16px;padding:16px;margin-top:12px}
+.input{background:#1C1C1E;border:1px solid var(--border);border-radius:12px;padding:12px;color:#fff;width:100%;margin-top:6px}
+.label{color:#E8C170;font-size:11px;margin-top:12px;display:block}
+.screen{display:none;padding:16px;max-width:540px;margin:0 auto}.screen.active{display:block}
+.topbar{display:flex;justify-content:space-between;padding:14px;background:#000;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#000;border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:10px}
+.nav button{background:none;border:none;color:#666;font-size:11px}
+</style>
+</head>
+<body>
+<div class="topbar"><b style="color:#E8C170">🛡️ AUTO-STOCK LIVE</b><span style="font-size:10px;color:#7AC74F">● Premium • R0 - Zeroed until users</span></div>
+<div id="home" class="screen active">
+<h2 style="color:#E8C170;margin-top:10px">Welcome, <span id="home_company">No company yet - 0</span></h2>
+<p style="font-size:12px;opacity:.6">All counts 0 until real users - GitHub Pages LIVE</p>
+<div class="card" onclick="show('stockin')"><b>📦 Stock IN</b> - <span id="stat_in">0 new • 0 today</span><br><small>REAL CAMERA scanner</small></div>
+<div class="card" onclick="show('dispatch')"><b>🚚 Stock OUT</b> - <span id="stat_out">0 dispatched</span></div>
+<div class="card" onclick="show('reports')"><b>📊 Reports</b> - <span id="stat_rep">0 generated</span></div>
+<div class="card"><b style="color:#E8C170">Quick Stats - LIVE</b><br>Total Scans: <b id="quick_scans">0</b> | Balance: <b id="quick_balance">0</b> | Products: <b id="prod_count">0</b></div>
+<button class="gold-btn" onclick="show('payment')">Go to Payment - REAL Paystack</button>
+<button class="gold-btn" onclick="show('signup')" style="background:#222;color:#E8C170;border:1px solid #E8C170">Create Account (0 users)</button>
+</div>
+<div id="signup" class="screen">
+<h2 style="color:#E8C170">Create Account - Zeroed</h2>
+<div class="card">
+<label class="label">Company Name (Registered)</label><input class="input" id="su_company" placeholder="Your company - 0 registered">
+<label class="label">Email</label><input class="input" id="su_email" placeholder="company@email.com">
+<label class="label">Password 5 letters + 3 numbers</label><input class="input" id="su_pass" placeholder="abcde123">
+<div style="margin-top:12px">
+<div style="border:1px solid rgba(232,193,112,.28);padding:10px;border-radius:12px;margin:6px 0;cursor:pointer" onclick="selectPkg('founder',299,this)">FOUNDER R299/m - Limited 10 users</div>
+<div style="border:1px solid rgba(232,193,112,.28);padding:10px;border-radius:12px;margin:6px 0;cursor:pointer" onclick="selectPkg('standard',499,this)">STANDARD R499/m - 5 users</div>
+<div style="border:1px solid rgba(232,193,112,.28);padding:10px;border-radius:12px;margin:6px 0;cursor:pointer" onclick="selectPkg('pro',999,this)">PRO R999/m</div>
+<div style="border:1px solid #E8C170;padding:10px;border-radius:12px;margin:6px 0;background:#1e1c14" id="defPkg" onclick="selectPkg('premium',1999,this)">PREMIUM R1999/m SELECTED - Unlimited</div>
+</div>
+<button class="gold-btn" onclick="goPayment()">SIGN UP → Paystack LIVE</button>
+</div>
+</div>
+<div id="payment" class="screen">
+<h2 style="color:#E8C170">REAL Paystack LIVE Payment</h2>
+<div class="card">
+<label class="label">Paystack Public Key (pk_live_... for real charge, pk_test_ for test)</label><input class="input" id="pay_key" value="pk_test_xxxxxxxxxxxxxxxx" placeholder="pk_live_...">
+<label class="label">Email for Receipt</label><input class="input" id="pay_email" placeholder="company@email.com">
+<div id="pay_plan_display" style="margin:10px 0;padding:10px;background:#000;border-radius:10px;border:1px solid rgba(232,193,112,.28)">PREMIUM R1999 - R1999.00</div>
+<div style="display:flex;justify-content:space-between"><span>Total</span><b id="pay_total">R1999.00</b></div>
+<button class="gold-btn" onclick="payWithPaystack()">PAY WITH PAYSTACK LIVE - Real Popup</button>
+<p id="pay_status" style="font-size:12px;text-align:center;margin-top:8px;color:#E8C170"></p>
+<button class="gold-btn" onclick="show('home')" style="background:#222;color:#E8C170;border:1px solid #E8C170">Skip - Keep 0 Demo</button>
+</div>
+</div>
+<div id="stockin" class="screen">
+<h2 style="color:#E8C170">Stock IN - 0 items</h2>
+<div class="card">
+<label class="label">Product Name</label><input class="input" id="in_product" placeholder="No products yet">
+<label class="label">Category</label><select class="input" id="in_cat"><option>Select</option><option>Food</option><option>Lab</option><option>Chemicals</option></select>
+<button class="gold-btn" onclick="saveStockIn()">Save and Start REAL Scanner →</button>
+</div>
+</div>
+<div id="scanner" class="screen">
+<h2 style="color:#E8C170;font-size:16px">REAL Barcode Scanner - Live Camera</h2>
+<div id="reader" style="width:100%;border:2px solid #E8C170;border-radius:16px;overflow:hidden;margin-top:10px"></div>
+<div class="card"><p>Scanned: <b id="scan_count">0 / 0</b> | Last: <span id="last_code">None</span></p><div style="height:8px;background:#222;border-radius:999px;margin:8px 0"><div id="scan_bar" style="height:100%;width:0%;background:#E8C170"></div></div><ul id="scan_list" style="font-size:11px;max-height:100px;overflow:auto"></ul></div>
+<button class="gold-btn" id="btn_start" onclick="startScanner()">📷 START CAMERA SCANNER</button>
+<button class="gold-btn" onclick="stopScanner()" style="background:#222;color:#E8C170;border:1px solid #E8C170">Stop</button>
+<button class="gold-btn" onclick="show('home')">Finish - Updates 0 → Real Count</button>
+<p id="session_id" style="font-size:11px;opacity:.5;text-align:center;margin-top:6px">Session: Will generate STK-IN-XXXXXX</p>
+</div>
+<div id="dispatch" class="screen">
+<h2 style="color:#E8C170">Stock OUT - Dispatch</h2>
+<div class="card">
+<label class="label">Product (from Stock IN - 0 now)</label><select class="input" id="out_product"><option>No products yet</option></select>
+<label class="label">Quantity</label><input class="input" id="out_qty" type="number" placeholder="0">
+<label class="label">Dispatcher</label><input class="input" id="out_dispatcher" placeholder="No dispatcher yet">
+<label class="label">Receiver</label><input class="input" id="out_receiver" placeholder="No receiver yet">
+<button class="gold-btn" onclick="generateSlip()">GENERATE REAL PDF SLIP</button>
+</div>
+</div>
+<div id="slip" class="screen">
+<div class="card" style="background:#FFFEF9;color:#111">
+<h3 style="text-align:center">DISPATCH SLIP - REAL PDF</h3>
+<p style="font-size:12px" id="slip_info">Slip No: DSP-0000-00000 - Auto<br>Product: No product - 0 kg<br>Dispatcher: No dispatcher<br>Receiver: No receiver</p>
+</div>
+<button class="gold-btn" onclick="downloadRealPDF()">⬇ Download REAL PDF (jsPDF)</button>
+<button class="gold-btn" onclick="show('home')" style="background:#222;color:#E8C170;border:1px solid #E8C170">Back to Dashboard</button>
+</div>
+<div id="reports" class="screen">
+<h2 style="color:#E8C170">Reports - Zeroed - Real PDF</h2>
+<div class="card"><p>Total IN: <b id="r_in">0</b> | Out: <b id="r_out">0</b> | Balance: <b id="r_bal">0</b> | Scans: <b id="r_scan">0</b></p></div>
+<button class="gold-btn" onclick="downloadReportPDF()">⬇ Download REAL Report PDF</button>
+</div>
+<div class="nav"><button onclick="show('home')">Dashboard</button><button onclick="show('payment')">Pay</button><button onclick="show('reports')">Reports</button></div>
+<script>
+let state={company:'',email:'',plan:'premium',amount:1999,totalIn:0,totalOut:0,scanned:[],products:[],dispatches:[]};
+let html5Qr=null;
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
+function selectPkg(name,amount,el){state.plan=name;state.amount=amount;document.querySelectorAll('#signup div[onclick]').forEach(d=>d.style.borderColor='rgba(232,193,112,.28)');el.style.borderColor='#E8C170';document.getElementById('pay_plan_display').innerText=name.toUpperCase()+' R'+amount+' - R'+amount+'.00';document.getElementById('pay_total').innerText='R'+amount+'.00';}
+function goPayment(){state.company=document.getElementById('su_company').value;state.email=document.getElementById('su_email').value;document.getElementById('pay_email').value=state.email;document.getElementById('home_company').innerText=state.company||'No company yet - 0';show('payment')}
+function payWithPaystack(){
+ let key=document.getElementById('pay_key').value.trim();let email=document.getElementById('pay_email').value.trim();
+ if(!key.startsWith('pk_')){document.getElementById('pay_status').innerText='Enter pk_live_ or pk_test_';return;}
+ let handler=PaystackPop.setup({key:key,email:email,amount:state.amount*100,currency:'ZAR',ref:'VERILAB-'+Math.floor(Math.random()*1000000000),callback:function(res){document.getElementById('pay_status').innerText='✅ Paid! Ref '+res.reference;setTimeout(()=>show('home'),1200);},onClose:function(){document.getElementById('pay_status').innerText='Closed - demo mode 0 remains';}});
+ handler.openIframe();
+}
+function saveStockIn(){
+ let p=document.getElementById('in_product').value;if(p){state.products.push(p);state.totalIn=state.products.length;document.getElementById('prod_count').innerText=state.totalIn;document.getElementById('stat_in').innerText=state.totalIn+' new';let sel=document.getElementById('out_product');sel.innerHTML='';state.products.forEach(pr=>{let o=document.createElement('option');o.text=pr;sel.add(o);});}
+ document.getElementById('session_id').innerText='Session: STK-IN-'+Math.floor(Math.random()*900000+100000);show('scanner');
+}
+function startScanner(){
+ if(html5Qr) return;
+ html5Qr=new Html5Qrcode("reader");
+ html5Qr.start({facingMode:"environment"},{fps:10,qrbox:{width:250,height:250}},(decoded)=>{
+  if(!state.scanned.includes(decoded)){state.scanned.push(decoded);document.getElementById('last_code').innerText=decoded;document.getElementById('scan_count').innerText=state.scanned.length+' / '+(state.totalIn||state.scanned.length);document.getElementById('scan_bar').style.width=Math.min(100,state.scanned.length*10)+'%';document.getElementById('quick_scans').innerText=state.scanned.length;document.getElementById('r_scan').innerText=state.scanned.length;let li=document.createElement('li');li.textContent=decoded;document.getElementById('scan_list').appendChild(li);if(navigator.vibrate)navigator.vibrate(200);}
+ },()=>{}).catch(e=>alert('Camera error - open GitHub link in Chrome and allow camera: '+e));
+}
+function stopScanner(){if(html5Qr){html5Qr.stop().then(()=>{html5Qr=null;});}}
+function generateSlip(){
+ let prod=document.getElementById('out_product').value||'No product';let qty=document.getElementById('out_qty').value||'0';let disp=document.getElementById('out_dispatcher').value||'No dispatcher';let recv=document.getElementById('out_receiver').value||'No receiver';let slip='DSP-2026-'+Math.floor(Math.random()*90000+10000);
+ document.getElementById('slip_info').innerText='Slip No: '+slip+'\nProduct: '+prod+' Qty: '+qty+'\nDispatcher: '+disp+'\nReceiver: '+recv;
+ state.dispatches.push({id:slip,product:prod});state.totalOut++;document.getElementById('stat_out').innerText=state.totalOut+' dispatched';document.getElementById('r_out').innerText=state.totalOut;document.getElementById('quick_balance').innerText=state.totalIn-state.totalOut;document.getElementById('r_bal').innerText=state.totalIn-state.totalOut;
+ show('slip');window._lastSlip=slip;
+}
+function downloadRealPDF(){
+ const {jsPDF}=window.jspdf;const doc=new jsPDF();doc.text('AUTO-STOCK DISPATCH SLIP - REAL PDF',10,20);doc.text(document.getElementById('slip_info').innerText,10,35);doc.save((window._lastSlip||'DSP-0000')+'.pdf');
+}
+function downloadReportPDF(){
+ const {jsPDF}=window.jspdf;const doc=new jsPDF();doc.text('VeriLab Report - Zeroed until users',10,20);doc.text('Total IN: '+state.totalIn,10,30);doc.text('Total Out: '+state.totalOut,10,37);doc.text('Scans: '+state.scanned.length,10,44);doc.text('Company: '+(state.company||'0'),10,51);doc.save('VeriLab-Report.pdf');
+}
+</script>
+</body>
+  </html>
